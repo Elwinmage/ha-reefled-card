@@ -60,7 +60,7 @@ class ReefLedCard extends LitElement {
             <option value="${option.value}" ?selected=${this.leds === option.value}>${option.text}</option>
             `)}
         </select>
-<div id="colors">
+<div id="colors" class="hidden">
 ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 </div>
     `;
@@ -73,7 +73,6 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 <h2>${id}</h2>
 Rise: <input type="number" max="24" min="0" id="${id}_rise_h"></input> : <input type="number" min=0 max=59 id="${id}_rise_m"></input><br />
 Set:  <input type="number" min=0 max=24  id="${id}_set_h"></input> : <input type="number"  min=0 max=59 id="${id}_set_m"></input><br />
-<div id="${id}_points">
 
 <select id="${id}_color_mode" @change="${() => this.onChangeColorMode(id)}">
 <option value="auto">Automatique</option>
@@ -85,9 +84,8 @@ Set:  <input type="number" min=0 max=24  id="${id}_set_h"></input> : <input type
 <option value="20">20.000K</option>
 <option value="23">23.000K</option>
 </select>
-<div id="${id}_points">
+<div id="${id}_points" class="hidden">
 Point 0: <input type="number" min=0 max=24 size=2 id="${id}_point_0_h"></input> : <input type="number" min=0 max=59 id="${id}_point_0_m"></input> Intensity<input type="number" min=0 max=100></input>%<br />
-</div>
 </div>
 </div>
 `;
@@ -116,6 +114,17 @@ Point 0: <input type="number" min=0 max=24 size=2 id="${id}_point_0_h"></input> 
 
     onChangeColorMode(id){
 	console.log(id);
+	this.selected = this.shadowRoot.querySelector('#'+id+'_color_mode').value;
+	var div_color_values=this.shadowRoot.getElementById ( id+"_color_values" );
+	var div_points=this.shadowRoot.getElementById ( id+"_points" );
+	if(this.selected=="auto"){
+	    div_color_values.style.visibility="visible"
+	    div_points.style.visibility="hidden"
+	}
+	else{
+	    div_color_values.style.visibility="hidden"
+	    div_points.style.visibility="visible"
+	}
     }
     
     onChange(){
@@ -196,9 +205,11 @@ Point 0: <input type="number" min=0 max=24 size=2 id="${id}_point_0_h"></input> 
         display: block;
         font-size: 18px;
       }
-      #colors{
+
+div.hidden{
 visibility: hidden;
 }
+
       .state {
         display: flex;
         justify-content: space-between;
