@@ -70,23 +70,22 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
     display_led_conf(id){
 	return html`
 <div id="${id}" class="led_conf">
-<h2>${id}</h2>
-Rise: <input type="number" max="24" min="0" id="${id}_rise_h"></input> : <input type="number" min=0 max=59 id="${id}_rise_m"></input><br />
-Set:  <input type="number" min=0 max=24  id="${id}_set_h"></input> : <input type="number"  min=0 max=59 id="${id}_set_m"></input><br />
-
-<select id="${id}_color_mode" @change="${() => this.onChangeColorMode(id)}">
-<option value="auto">Automatique</option>
-<option value="manual">Manual</option>
-</select><br />
-<select id="${id}_color_values">
-<option value="12">12.000K</option>
-<option value="15">15.000K</option>
-<option value="20">20.000K</option>
-<option value="23">23.000K</option>
-</select>
-<div id="${id}_points" class="hidden">
-Point 0: <input type="number" min=0 max=24 size=2 id="${id}_point_0_h"></input> : <input type="number" min=0 max=59 id="${id}_point_0_m"></input> Intensity<input type="number" min=0 max=100></input>%<br />
-</div>
+  <h2>${id}</h2>
+  Rise: <input type="number" max="24" min="0" id="${id}_rise_h"></input> : <input type="number" min=0 max=59 id="${id}_rise_m"></input><br />
+  Set:  <input type="number" min=0 max=24  id="${id}_set_h"></input> : <input type="number"  min=0 max=59 id="${id}_set_m"></input><br />
+  <select id="${id}_color_mode" @change="${() => this.onChangeColorMode(id)}">
+    <option value="auto">Automatique</option>
+    <option value="manual">Manual</option>
+  </select><br />
+  <select id="${id}_color_values">
+    <option value="12">12.000K</option>
+    <option value="15">15.000K</option>
+    <option value="20">20.000K</option>
+    <option value="23">23.000K</option>
+  </select>
+  <div id="${id}_points" class="hidden">
+    Point 0: <input type="number" min=0 max=24 size=2 id="${id}_point_0_h"></input> : <input type="number" min=0 max=59 id="${id}_point_0_m"></input> Intensity<input type="number" min=0 max=100></input>%<br />
+  </div>
 </div>
 `;
     }
@@ -118,12 +117,12 @@ Point 0: <input type="number" min=0 max=24 size=2 id="${id}_point_0_h"></input> 
 	var div_color_values=this.shadowRoot.getElementById ( id+"_color_values" );
 	var div_points=this.shadowRoot.getElementById ( id+"_points" );
 	if(this.selected=="auto"){
-	    div_color_values.style.visibility="visible"
-	    div_points.style.visibility="hidden"
+	    div_color_values.style.display="block";
+	    div_points.style.display="none";
 	}
 	else{
-	    div_color_values.style.visibility="hidden"
-	    div_points.style.visibility="visible"
+	    div_color_values.style.display="none";
+	    div_points.style.display="block";
 	}
     }
     
@@ -133,12 +132,12 @@ Point 0: <input type="number" min=0 max=24 size=2 id="${id}_point_0_h"></input> 
 	    var div_color=this.shadowRoot.getElementById ( "colors" ) ;
 	    if (this.selected=="unselected"){
 		console.log('Nothing selected');
-		div_color.style.visibility="hidden";
+		div_color.style.display="none";
 	    }
 	    else{
 		console.log('Selected -->', this.selected );
 		var entities=this.hass.entities;
-		div_color.style.visibility="visible";
+		div_color.style.display="block";
 		for (var entity in entities){
 		    var e=entities[entity];
 		    if(e.device_id==this.selected && String(e.entity_id).startsWith('sensor.') && this.hass.states[e.entity_id].attributes.hasOwnProperty('clouds')){
@@ -207,7 +206,7 @@ Point 0: <input type="number" min=0 max=24 size=2 id="${id}_point_0_h"></input> 
       }
 
 div.hidden{
-visibility: hidden;
+display: none;
 }
 
       .state {
