@@ -1,6 +1,3 @@
-//import "https://unpkg.com/wired-card@0.8.1/wired-card.js?module";
-//import "https://unpkg.com/wired-toggle@0.8.0/wired-toggle.js?module";
-
 import {
     LitElement,
     html,
@@ -84,18 +81,64 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
     <option value="23">23.000K</option>
   </select>
   <div id="${id}_points" class="hidden">
-    Point 0: <input type="number" min=0 max=24 size=2 id="${id}_point_0_h"></input> : <input type="number" min=0 max=59 id="${id}_point_0_m"></input> Intensity<input type="number" min=0 max=100></input>%<br />
   </div>
 </div>
 `;
     }
     
 
-    led_points(id){
-	
-	return html `
+    led_point(color,point){
+	return html `Point 0: <input type="number" min=0 max=24 size=2 id="${color}_point_0_h"></input> : <input type="number" min=0 max=59 id="${color}_point_0_m"></input> Intensity<input type="number" min=0 max=100></input>%<br />`;
+    }
 
-`;
+    // Display form to edit colors points values
+    edit_points(color){
+	var rise=parseInt(this.progs[0].attributes.data[color].rise);
+	var points=this.progs[0].attributes.data[color].points;
+	console.log("edit_points");
+	console.log(points);
+	var elt=this.shadowRoot.getElementById(color+"_points");
+	var ul = this.shadowRoot.createElement("ul");
+	elt.appendChild(ul);
+	for (var point  in points){
+	    var values=points[point];
+	    console.log(values);
+	    //elt.append(this.led_point(color,point));
+	    var li = this.shadowRoot.createElement("li");
+	    /*var name=document.createTextNode("Point "+point);
+	    li.appendChild(name);*/
+	    var input_h=this.shadowRoot.createElement("input");
+	    input_h.setAttribute("type","number");
+	    input_h.setAttribute("id",color+"_point_"+point+"_h");
+	    input_h.setAttribute("min","0");
+	    input_h.setAttribute("max","24");
+	    input_h.setAttribute("size","2");
+	    input_h.setAttribute("value",this.minutes_to_hours(rise + parseInt(values["t"])));
+	    li.appendChild(input_h);
+	    var separator= document.createTextNode(" : ");
+	    li.appendChild(separator);
+	    var input_m=this.shadowRoot.createElement("input");
+	    input_m.setAttribute("type","number");
+	    input_m.setAttribute("id",color+"_point_"+point+"_m");
+	    input_m.setAttribute("min","0");
+	    input_m.setAttribute("max","59");
+	    input_m.setAttribute("size","2");
+	    input_m.setAttribute("value",this.minutes_to_minutes(rise+parseInt(values["t"])));	    
+	    li.appendChild(input_m);
+	    var input_i=this.shadowRoot.createElement("input");
+	    input_i.setAttribute("type","number");
+	    input_i.setAttribute("id",color+"_point_"+point+"_i");
+	    input_i.setAttribute("min","0");
+	    input_i.setAttribute("max","100");
+	    input_i.setAttribute("size","3");
+	    input_i.setAttribute("value",values["i"]);
+	    li.appendChild(input_i);
+	    var s_percent= document.createTextNode("%");
+	    li.appendChild(s_percent);
+	    
+	    ul.appendChild(li);
+	}
+	//	this.shadowRoot.
     }
     
     init_leds(){
@@ -113,6 +156,7 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 
     onChangeColorMode(id){
 	console.log(id);
+	console.log('----');
 	this.selected = this.shadowRoot.querySelector('#'+id+'_color_mode').value;
 	var div_color_values=this.shadowRoot.getElementById ( id+"_color_values" );
 	var div_points=this.shadowRoot.getElementById ( id+"_points" );
@@ -123,6 +167,7 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 	else{
 	    div_color_values.style.display="none";
 	    div_points.style.display="block";
+	    this.edit_points(id);
 	}
     }
     
@@ -148,7 +193,6 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 		let prog=this.progs[0];
 		let rise=prog.attributes.data.white.rise;
 		
-		let test=  prog.attributes.data['white'].rise;
 		for (var color in this.colors) {
 		    let c_name=this.colors[color];
 		    this.shadowRoot.getElementById(c_name+"_rise_h").value=this.minutes_to_hours(prog.attributes.data[c_name].rise);
