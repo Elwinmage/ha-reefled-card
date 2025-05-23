@@ -58,6 +58,16 @@ class ReefLedCard extends LitElement {
             `)}
         </select>
 <div id="colors" class="hidden">
+  <select id="color_mode" @change="${() => this.onChangeColorMode()}">
+    <option value="auto">Automatique</option>
+    <option value="manual">Manual</option>
+  </select><br />
+  <select id="color_values">
+    <option value="12">12.000K</option>
+    <option value="15">15.000K</option>
+    <option value="20">20.000K</option>
+    <option value="23">23.000K</option>
+  </select>
 ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 </div>
     `;
@@ -70,16 +80,6 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
   <h2>${id}</h2>
   Rise: <input type="number" max="24" min="0" id="${id}_rise_h"></input> : <input type="number" min=0 max=59 id="${id}_rise_m"></input><br />
   Set:  <input type="number" min=0 max=24  id="${id}_set_h"></input> : <input type="number"  min=0 max=59 id="${id}_set_m"></input><br />
-  <select id="${id}_color_mode" @change="${() => this.onChangeColorMode(id)}">
-    <option value="auto">Automatique</option>
-    <option value="manual">Manual</option>
-  </select><br />
-  <select id="${id}_color_values">
-    <option value="12">12.000K</option>
-    <option value="15">15.000K</option>
-    <option value="20">20.000K</option>
-    <option value="23">23.000K</option>
-  </select>
   <div id="${id}_points" class="hidden">
   </div>
 </div>
@@ -137,6 +137,9 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 	    li.appendChild(s_percent);
 	    
 	    ul.appendChild(li);
+	    if(color=="moon"){
+		var div_points_b=this.shadowRoot.getElementById ( "moon_points" ).style.display="block";
+	    }
 	}
 	//	this.shadowRoot.
     }
@@ -154,20 +157,26 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 	}
     }
 
-    onChangeColorMode(id){
-	console.log(id);
-	console.log('----');
-	this.selected = this.shadowRoot.querySelector('#'+id+'_color_mode').value;
-	var div_color_values=this.shadowRoot.getElementById ( id+"_color_values" );
-	var div_points=this.shadowRoot.getElementById ( id+"_points" );
+    onChangeColorMode(){
+	this.selected = this.shadowRoot.getElementById("color_mode").value;
+	var div_color_values=this.shadowRoot.getElementById ( "color_values" );
+	var div_points_w=this.shadowRoot.getElementById ( "white_points" );
+	var div_points_b=this.shadowRoot.getElementById ( "blue_points" );
 	if(this.selected=="auto"){
 	    div_color_values.style.display="block";
-	    div_points.style.display="none";
+	    div_points_w.style.display="none";
+	    div_points_b.style.display="none";
 	}
 	else{
+	    for (var color in this.colors){
+		var c=this.colors[color];
+		//		this.shadowRoot.getElementById(c+"_points").removeChildren();
+		this.shadowRoot.getElementById(c+"_points").textContent='';
+		this.edit_points(c);
+	    }
 	    div_color_values.style.display="none";
-	    div_points.style.display="block";
-	    this.edit_points(id);
+	    div_points_w.style.display="block";
+	    div_points_b.style.display="block";
 	}
     }
     
@@ -199,7 +208,10 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 		    this.shadowRoot.getElementById(c_name+"_rise_m").value=this.minutes_to_minutes(prog.attributes.data[c_name].rise);
 		    this.shadowRoot.getElementById(c_name+"_set_h").value=this.minutes_to_hours(prog.attributes.data[c_name].set);
 		    this.shadowRoot.getElementById(c_name+"_set_m").value=this.minutes_to_minutes(prog.attributes.data[c_name].set);
-		}
+    		}
+		this.edit_points("moon");
+		this.shadowRoot.getElementById ( "moon_points" ).style.display="block";
+
 	    }
 	},300)
 	
