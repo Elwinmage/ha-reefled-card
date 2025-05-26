@@ -135,14 +135,37 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 	    li.appendChild(input_i);
 	    var s_percent= document.createTextNode("%");
 	    li.appendChild(s_percent);
-	    
+	    var delete_button = this.shadowRoot.createElement("input");
+	    delete_button.setAttribute("type","button");
+	    delete_button.setAttribute("Value","delete");
+	    delete_button.setAttribute("id",color+"_delete_point_"+point);
+	    delete_button.onclick=this.delete_point;
+	    li.appendChild(delete_button);
 	    ul.appendChild(li);
 	    if(color=="moon"){
 		var div_points_b=this.shadowRoot.getElementById ( "moon_points" ).style.display="block";
 	    }
+    
 	}
-	//	this.shadowRoot.
+	var add_button = this.shadowRoot.createElement("input");
+	add_button.setAttribute("type","button");
+	add_button.setAttribute("Value","new");
+	add_button.setAttribute("id",color+"_add_point");
+	add_button.onclick=this.add_point;
+	var li_add = this.shadowRoot.createElement("li");
+	li_add=ul.appendChild(add_button);
     }
+
+
+    delete_point(event){
+	console.log(event.target.id);
+    }
+
+    
+    add_point(event){
+	console.log(event.target.id);
+    }
+
     
     init_leds(){
 	for (var device_id in this.hass.devices){
@@ -283,4 +306,4 @@ display: none;
     `;
     }
 }
-customElements.define("ha-reefled-card", ReefLedCard);
+customElements.define("reefled-card", ReefLedCard);
