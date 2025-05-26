@@ -2,7 +2,7 @@
   "name": "ha-reefled-card",
   "version": "0.0.1",
   "description": "A Home Assistant Lovelace card for reefled from Red Sea",
-  "main": "reefled-card.js",
+  "main": "src/reefled-card.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Elwinmage/ha-reefled-card.git"
