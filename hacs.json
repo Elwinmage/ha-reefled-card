@@ -1,5 +1,6 @@
 {
-  "name": "reefled-card",
-  "homeassistant": "2025.5.0",
-  "render_readme": true
+    "name": "reefled-card",
+    "filename": "reefled-card.js"
+    "homeassistant": "2025.5.0",
+    "render_readme": true
 }
