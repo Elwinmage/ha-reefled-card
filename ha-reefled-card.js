@@ -100,14 +100,15 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 	var elt=this.shadowRoot.getElementById(color+"_points");
 	var ul = this.shadowRoot.createElement("ul");
 	elt.appendChild(ul);
-	for (var point  in points){
-	    var values=points[point];
+	for (let point  in points){
+	    let values=points[point];
 	    console.log(values);
 	    //elt.append(this.led_point(color,point));
-	    var li = this.shadowRoot.createElement("li");
+	    let li = this.shadowRoot.createElement("li");
+	    li.setAttribute("id",color+"_point_"+point);
 	    /*var name=document.createTextNode("Point "+point);
 	    li.appendChild(name);*/
-	    var input_h=this.shadowRoot.createElement("input");
+	    let input_h=this.shadowRoot.createElement("input");
 	    input_h.setAttribute("type","number");
 	    input_h.setAttribute("id",color+"_point_"+point+"_h");
 	    input_h.setAttribute("min","0");
@@ -115,9 +116,9 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 	    input_h.setAttribute("size","2");
 	    input_h.setAttribute("value",this.minutes_to_hours(rise + parseInt(values["t"])));
 	    li.appendChild(input_h);
-	    var separator= document.createTextNode(" : ");
+	    let separator= document.createTextNode(" : ");
 	    li.appendChild(separator);
-	    var input_m=this.shadowRoot.createElement("input");
+	    let input_m=this.shadowRoot.createElement("input");
 	    input_m.setAttribute("type","number");
 	    input_m.setAttribute("id",color+"_point_"+point+"_m");
 	    input_m.setAttribute("min","0");
@@ -125,7 +126,7 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 	    input_m.setAttribute("size","2");
 	    input_m.setAttribute("value",this.minutes_to_minutes(rise+parseInt(values["t"])));	    
 	    li.appendChild(input_m);
-	    var input_i=this.shadowRoot.createElement("input");
+	    let input_i=this.shadowRoot.createElement("input");
 	    input_i.setAttribute("type","number");
 	    input_i.setAttribute("id",color+"_point_"+point+"_i");
 	    input_i.setAttribute("min","0");
@@ -133,32 +134,38 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 	    input_i.setAttribute("size","3");
 	    input_i.setAttribute("value",values["i"]);
 	    li.appendChild(input_i);
-	    var s_percent= document.createTextNode("%");
+	    let s_percent= document.createTextNode("%");
 	    li.appendChild(s_percent);
-	    var delete_button = this.shadowRoot.createElement("input");
+	    let delete_button = this.shadowRoot.createElement("input");
 	    delete_button.setAttribute("type","button");
 	    delete_button.setAttribute("Value","delete");
 	    delete_button.setAttribute("id",color+"_delete_point_"+point);
-	    delete_button.onclick=this.delete_point;
+	    console.log(point);
+	    delete_button.onclick=()=>this.delete_point(color,point,this.progs[0].attributes.data,li);
 	    li.appendChild(delete_button);
 	    ul.appendChild(li);
 	    if(color=="moon"){
-		var div_points_b=this.shadowRoot.getElementById ( "moon_points" ).style.display="block";
+		let div_points_b=this.shadowRoot.getElementById ( "moon_points" ).style.display="block";
 	    }
     
 	}
-	var add_button = this.shadowRoot.createElement("input");
+	let add_button = this.shadowRoot.createElement("input");
 	add_button.setAttribute("type","button");
 	add_button.setAttribute("Value","new");
 	add_button.setAttribute("id",color+"_add_point");
+	
 	add_button.onclick=this.add_point;
-	var li_add = this.shadowRoot.createElement("li");
+	let li_add = this.shadowRoot.createElement("li");
 	li_add=ul.appendChild(add_button);
     }
 
 
-    delete_point(event){
-	console.log(event.target.id);
+    delete_point(color,point,prog,elt){
+	console.log(color);
+	console.log(point);
+	console.log(prog);
+	elt.remove();
+	prog[color]['points'].splice(point,1);
     }
 
     
