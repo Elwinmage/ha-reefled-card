@@ -1,0 +1,21 @@
+{
+  "name": "ha-reefled-card",
+  "version": "0.0.1",
+  "description": "A Home Assistant Lovelace card for reefled from Red Sea",
+  "main": "reefled-card.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elwinmage/ha-reefled-card.git"
+  },
+  "keywords": [
+    "lovelace",
+    "reefled",
+    "home-assistant"
+  ],
+  "author": "Eric MORAND",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Elwinmage/ha-reefled-card/issues"
+  },
+  "homepage": "https://github.com/Elwinmage/ha-reffled-card#readme",
+}
