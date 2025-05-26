@@ -283,4 +283,4 @@ display: none;
     `;
     }
 }
-customElements.define("reefled-card", ReefLedCard);
+customElements.define("ha-reefled-card", ReefLedCard);
