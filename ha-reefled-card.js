@@ -153,10 +153,9 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 	add_button.setAttribute("type","button");
 	add_button.setAttribute("Value","new");
 	add_button.setAttribute("id",color+"_add_point");
-	
-	add_button.onclick=this.add_point;
+	add_button.onclick=()=>this.add_point(color,this.progs[0].attributes.data,ul);
 	let li_add = this.shadowRoot.createElement("li");
-	li_add=ul.appendChild(add_button);
+	li_add=elt.appendChild(add_button);
     }
 
 
@@ -169,8 +168,49 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
     }
 
     
-    add_point(event){
-	console.log(event.target.id);
+    add_point(color, prog,list){
+	let li = this.shadowRoot.createElement("li");
+	let point=prog[color]['points'].length;
+	let values=points[point];
+	let values={"t":0,"i":0};
+	prog[color]['points'].push(default_values);
+	li.setAttribute("id",color+"_point_"+point);
+	let input_h=this.shadowRoot.createElement("input");
+	input_h.setAttribute("type","number");
+	input_h.setAttribute("id",color+"_point_"+point+"_h");
+	input_h.setAttribute("min","0");
+	input_h.setAttribute("max","24");
+	input_h.setAttribute("size","2");
+	input_h.setAttribute("value","00");
+	li.appendChild(input_h);
+	let separator= document.createTextNode(" : ");
+	li.appendChild(separator);
+	let input_m=this.shadowRoot.createElement("input");
+	input_m.setAttribute("type","number");
+	input_m.setAttribute("id",color+"_point_"+point+"_m");
+	input_m.setAttribute("min","0");
+	input_m.setAttribute("max","59");
+	input_m.setAttribute("size","2");
+	input_m.setAttribute("value","00");
+	li.appendChild(input_m);
+	let input_i=this.shadowRoot.createElement("input");
+	input_i.setAttribute("type","number");
+	input_i.setAttribute("id",color+"_point_"+point+"_i");
+	input_i.setAttribute("min","0");
+	input_i.setAttribute("max","100");
+	input_i.setAttribute("size","3");
+	input_i.setAttribute("value","0");
+	li.appendChild(input_i);
+	let s_percent= document.createTextNode("%");
+	li.appendChild(s_percent);
+	let delete_button = this.shadowRoot.createElement("input");
+	delete_button.setAttribute("type","button");
+	delete_button.setAttribute("Value","delete");
+	delete_button.setAttribute("id",color+"_delete_point_"+point);
+	console.log("Adding: "+color+"_point_"+point);
+	delete_button.onclick=()=>this.delete_point(color,point,this.progs[0].attributes.data,li);
+	li.appendChild(delete_button);
+	list.appendChild(li);
     }
 
     
