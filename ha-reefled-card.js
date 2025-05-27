@@ -171,9 +171,8 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
     add_point(color, prog,list){
 	let li = this.shadowRoot.createElement("li");
 	let point=prog[color]['points'].length;
-	let values=points[point];
 	let values={"t":0,"i":0};
-	prog[color]['points'].push(default_values);
+	prog[color]['points'].push(values);
 	li.setAttribute("id",color+"_point_"+point);
 	let input_h=this.shadowRoot.createElement("input");
 	input_h.setAttribute("type","number");
@@ -181,7 +180,7 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 	input_h.setAttribute("min","0");
 	input_h.setAttribute("max","24");
 	input_h.setAttribute("size","2");
-	input_h.setAttribute("value","00");
+	input_h.setAttribute("value","");
 	li.appendChild(input_h);
 	let separator= document.createTextNode(" : ");
 	li.appendChild(separator);
@@ -191,7 +190,7 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 	input_m.setAttribute("min","0");
 	input_m.setAttribute("max","59");
 	input_m.setAttribute("size","2");
-	input_m.setAttribute("value","00");
+	input_m.setAttribute("value","");
 	li.appendChild(input_m);
 	let input_i=this.shadowRoot.createElement("input");
 	input_i.setAttribute("type","number");
@@ -199,7 +198,7 @@ ${this.colors.map((i) => html`${this.display_led_conf(i)} `)}
 	input_i.setAttribute("min","0");
 	input_i.setAttribute("max","100");
 	input_i.setAttribute("size","3");
-	input_i.setAttribute("value","0");
+	input_i.setAttribute("value","");
 	li.appendChild(input_i);
 	let s_percent= document.createTextNode("%");
 	li.appendChild(s_percent);
